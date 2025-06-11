@@ -57,6 +57,16 @@ class QRCodeServlet extends ScalatraServlet with JacksonJsonSupport {
     }
   }
 
+
+  get("/:id") {
+    qrService.getQRCode(params("id")) match {
+      case Some(qrCode) => QRCodeResponse.fromQRCode(qrCode)
+      case None =>
+        status = 404
+        Map("error" -> "QR code not found")
+    }
+  }
+
   get("/download/:id") {
     qrService.getQRCode(params("id")) match {
       case Some(qrCode) =>
@@ -67,6 +77,16 @@ class QRCodeServlet extends ScalatraServlet with JacksonJsonSupport {
         contentType = "application/json"
         status = 404
         Map("error" -> "QR code not found")
+    }
+  }
+
+  delete("/:id") {
+    if (qrService.deleteQRCode(params("id"))) {
+      status = 204
+      ""
+    } else {
+      status = 404
+      Map("error" -> "QR code not found")
     }
   }
 
@@ -83,25 +103,6 @@ class QRCodeServlet extends ScalatraServlet with JacksonJsonSupport {
         Map("error" -> "Invalid type parameter. Use 'read' or 'generated'")
       case None =>
         qrService.getHistory.map(QRCodeResponse.fromQRCode)
-    }
-  }
-
-  get("/:id") {
-    qrService.getQRCode(params("id")) match {
-      case Some(qrCode) => QRCodeResponse.fromQRCode(qrCode)
-      case None =>
-        status = 404
-        Map("error" -> "QR code not found")
-    }
-  }
-
-  delete("/:id") {
-    if (qrService.deleteQRCode(params("id"))) {
-      status = 204
-      ""
-    } else {
-      status = 404
-      Map("error" -> "QR code not found")
     }
   }
 }

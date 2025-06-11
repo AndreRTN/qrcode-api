@@ -2,6 +2,7 @@ package services
 
 import java.awt.image.BufferedImage
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream}
+import java.time.LocalDateTime
 import java.util.Base64
 import javax.imageio.ImageIO
 import scala.collection.concurrent.TrieMap
@@ -16,6 +17,8 @@ class QRCodeService {
   private val storage = TrieMap[String, QRCode]()
   private val qrWriter = new QRCodeWriter()
   private val qrReader = new MultiFormatReader()
+
+  implicit val localDateTimeOrdering: Ordering[LocalDateTime] = Ordering.by(_.toString)
 
   def generateQRCode(content: String, size: Int = 300): Try[QRCode] = Try {
     val bitMatrix = qrWriter.encode(content, BarcodeFormat.QR_CODE, size, size)
