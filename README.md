@@ -1,6 +1,6 @@
 # QR Code API
 
-Uma API REST em Scala para geração, leitura e gerenciamento de QR codes utilizando Scalatra e ZXing.
+Uma API REST em Scala para geração, leitura e gerenciamento de QR codes utilizando Scalatra e ZXing , Feita para reforçar o aprendizado na linguagem Scala.
 
 ## ✨ Funcionalidades
 
